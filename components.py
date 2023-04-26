@@ -9,13 +9,13 @@ def getContainers():
         data = {
             'id': container.id,
             'name': container.name,
-            'image': container.attrs['Config']['Image'],
+            # 'image': container.attrs['Config']['Image'],
             'status': container.status,
             'created_at': container.attrs['Created'],
             'ports': container.attrs['HostConfig']['PortBindings'],
-            'labels': container.labels,
-            'exit_code': container.attrs['State']['ExitCode'],
-            'exit_time': container.attrs['State']['FinishedAt']
+            # 'labels': container.labels,
+            # 'exit_code': container.attrs['State']['ExitCode'],
+            # 'exit_time': container.attrs['State']['FinishedAt']
         }
         containers_list.append(data)
 
