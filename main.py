@@ -1,32 +1,22 @@
-import os
-from typing import Union
+from docker import from_env as docker_env
+from uvicorn import run as uvicorn_run
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from components import getContainerById, getContainers
+from components import *
 
 app = FastAPI()
-
-origins = ["*"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
-
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
 @app.get("/containers")
 def containers():
-    # data = [i for i in getContainers()]7
-    data = getContainers()
-    return data
-    
+    return list(map(get_container_data, docker_env().containers.list(all=True)))
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+if __name__ == '__main__':
+    uvicorn_run('main:app', reload=True, host='0.0.0.0', port=8003)
+
