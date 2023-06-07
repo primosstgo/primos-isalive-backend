@@ -17,6 +17,13 @@ app.add_middleware(
 def containers():
     return list(map(get_container_data, docker_env().containers.list(all=True)))
 
+@app.post("/reset-container/{id}")
+def reset_container(id: str):
+    client = docker_env()
+    container = client.containers.get(id)
+    container.restart() # (?)
+    return {"message": "Container reset successfully"}
+
 if __name__ == '__main__':
     uvicorn_run('main:app', reload=True, host='0.0.0.0', port=8003)
 
